@@ -30,9 +30,6 @@ class Customer(Model):
     class Meta:
         database = db
     
-    def get_info(self):
-        return f"Customer {self.id_customer}'s data: Name: {self.name} | Email: {self.email} | Birth Year: {self.birth_year} | State: {self.state}"
-
 db.connect()
 db.create_tables([Customer])
 
@@ -50,10 +47,11 @@ customers = [
 ]
 
 # 1. SET UP DATA
-# To save time, uncomment the code below, run the code, and then comment the
-# code again (so you don't create duplicate rows each time you run this)
+# To save time, delete your sqlite db file, and run this file. This will
+# automatically create some customers for you the first time you run your code.
 
-#Customer.insert_many(customers).execute()
+if Customer.select().count() == 0:
+    Customer.insert_many(customers).execute()
 
 # 2. GET ALL ROWS FROM THE DATABASE
 # Use Customer.select() to get all the customers in your database. Then loop

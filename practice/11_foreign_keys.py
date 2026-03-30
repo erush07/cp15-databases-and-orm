@@ -22,40 +22,15 @@ field_name = ForeignKeyField(Customer, backref='appointments', on_delete='CASCAD
 
 # 1. CREATE CLASSES FOR books.db
 # Using the existing books.db database, create classes for Author and Book
-
-from peewee import *
-
-# Connect to the SQLite database
-db = SqliteDatabase('books.db')
-
-# Define the Peewee models
-class BaseModel(Model):
-    class Meta:
-        database = db
-
-class Author(BaseModel):
-    author_id = IntegerField(primary_key=True)
-    name = TextField(null=False)
-    birth_year = IntegerField(null=False)
-
-class Book(BaseModel):
-    book_id = IntegerField(primary_key=True)
-    title = TextField(null=False)
-    pages = IntegerField(null=False)
-    year_published = IntegerField(null=False)
-    author_id = ForeignKeyField(Author, backref='books', on_delete="CASCADE")
+# When you create your SqliteDatabase connection, add pragmas for foreign key
+# db = SqliteDatabase('books.db', pragmas={'foreign_keys': 1})
 
 
-db.connect()
-db.create_tables([Author, Book])
 
 # 2. READ FROM THE DATABASE
 # Print out the titles of all the books.
 
-all_books = Book.select()
 
-for book_obj in all_books:
-    print((book_obj.title))
 
 '''
 Foreign Key Field Structure
