@@ -42,17 +42,38 @@ it is more justifiable.
 # needing to type out peewee. before everything. But to start out, we might
 # just import peewee to show where everything is coming from.
 
-
+#from peewee import *
+import peewee as p
 
 # 2. CREATE YOUR DATABASE CONNECTION
 # Connect to your database. In this case, we'll create a new one called
 # customers.db
 
+db = p.SqliteDatabase("customers.db")
 
+class Customer(p.Model):
+    id_customer = p.AutoField(primary_key = True)
+    name = p.CharField()
+    email = p.CharField(null = True) # if you add null = true you are saying it is optional, this field can be blank
+    birth_year = p.IntegerField()
+    state = p.CharField(default = "UT") # default is the default value if you don't provide one
 
+    # connect this class to the database you created
+    class Meta:
+        database = db # db is the sqlite datebase you made above the class
+
+db.connect() # this neexds to come first - if the database doesn't exits, if already exist, just connect to it.
+db.create_tables([Customer]) # must give in a list format. if the tables don't already exist in the db creat them
+
+# the .create() method does 2 things:
+# it will create a ro in the database and also return a python objectg
+# you can use that onject just like anything else you've already done with objects
+cust_obj = Customer.create(name="James", email="example@example.com", birth_year=2005, state = "CA")
+
+print(cust_obj.name)
 
 # 3. CREATE YOUR ORM MODEL FOR THE CUSTOMER TABLE
-# Create a Customer class. This will need to inherit from peewee's class Base.
+# Create a Customer class. This will need to inherit from peewee's class Model.
 # You want your customer table to have the following fields (columns), so they
 # need to be included in your class:
 #   id_customer: AutoField(primary_key=True)
@@ -61,6 +82,7 @@ it is more justifiable.
 #   birth_year: IntegerField
 #   state: CharField(default="UT")
 
+        # DONE :)
 
 '''
 RULES FOR peewee MODELS

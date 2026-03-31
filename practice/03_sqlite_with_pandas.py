@@ -13,3 +13,5 @@ db = sqlite3.connect('books.db')
 
 # 1. Given the above connection, get a dataframe of the whole book table
 
+df = pd.read_sql("select * from book", db)
+print(df)

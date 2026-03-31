@@ -30,6 +30,9 @@ class Customer(Model):
     class Meta:
         database = db
     
+    def get_info(self):
+        return f"Customer {self.id_customer}'s data: Name: {self.name} | Email: {self.email} | Birth Year: {self.birth_year} | State: {self.state}"
+    
 db.connect()
 db.create_tables([Customer])
 
@@ -57,6 +60,12 @@ if Customer.select().count() == 0:
 # Use Customer.select() to get all the customers in your database. Then loop
 # through them and print out their name and birth year
 
+# .select gets you every row from a table
+all_customers = Customer.select()
+
+for cust_obj in all_customers:
+    #print(f"{cust_obj.name}: {cust_obj.email}")
+    print(cust_obj.get_info())
 
 
 # 3. EXTEND YOUR CUSTOMER CLASS
@@ -68,7 +77,12 @@ if Customer.select().count() == 0:
 
 # 4. GET A SUBSET OF THE DATA
 # Using .where() after .select() Get only those customers born after 1990
+clear_screen()
 
+subset_customers = Customer.select().where(Customer.birth_year > 1990)
+
+for cust_obj in subset_customers:
+    print(cust_obj.get_info())
 
 # 5. ORDER THE RESULTS
 # Use .order_by(table.column_name) to order the results in a specific way
@@ -76,19 +90,36 @@ if Customer.select().count() == 0:
 # Try getting the same results as #4, but order the results by birth year
 # in descending order.
 
+clear_screen()
+
+subset_customers = Customer.select().where(Customer.birth_year > 1990).order_by(Customer.birth_year.desc())
+
+for cust_obj in subset_customers:
+    print(cust_obj.get_info())
+
+
 # 6. GET A SUBSET OF THE DATA WITH MULTIPLE CONDITIONS
 # Using .where() after .select() Get only those customers born after 1990 and
 # from Pennsylvania (PA). In peewee, you need to put each condition in
 # parentheses, with `&` instead of `and`. (| is used instead of or. ~ is used
 # instead of not).
 
+clear_screen()
+
+subset_customers = Customer.select().where((Customer.birth_year > 1990) & (Customer.state == "PA")) # not working don't know why
+for cust_obj in subset_customers:
+    print(cust_obj.get_info())
 
 # 7. GET A SINGLE RECORD USING .get
 # .get() limits the result to a single row.
 # Best used with ids (primary keys). Get customer with the id of 3 and print
 # out their name
+clear_screen()
+single_customer = Customer.get(Customer.id_customer == 3)
+print(single_customer.get_info())
 
-
+# .first()
+oldest_customer = Customer.select().order_by(Customer.birth_year.asc()).first()
 
 '''
 Other methods:
