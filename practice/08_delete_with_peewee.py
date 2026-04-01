@@ -37,6 +37,12 @@ db.create_tables([Customer])
 # Get the customer with ID 4. Use .delete_instance() to delete them from the
 # database. 
 
+cust_obj = Customer.get(Customer.id_customer == 4) # acts kind of like a "WHERE" clause
+
+# poof, it is gone from the datebase!
+cust_obj.delete_instance()
+
+print(cust_obj.name)
 
 
 '''

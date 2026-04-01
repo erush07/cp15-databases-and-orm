@@ -21,8 +21,10 @@ to add some extra functionality.
 # **kwargs, with the two asterisks before it. The function should just print out
 # kwargs. Call the function and give it the argument of text="hello" and run it.
 # Try running it with more arguments and see what happens.
+def kwargs_example(**kwargs): # keyword arguments key thing is the two *
+    print(kwargs)
 
-
+kwargs_example(text="hello", more_text = "something else", age = 99)
 
 # 2. **KWARGS EXAMPLE 2
 # Make a function called kwargs_example_2 with **kwargs as its only parameter
@@ -30,7 +32,21 @@ to add some extra functionality.
 # uppercase, put the uppercased version back into kwargs, and then print out
 # kwargs
 
+clear_screen()
 
+def kwargs_example_2(**kwargs):
+    name_value = kwargs.get('name')
+
+    if name_value is not None:
+        print(f"This has a name! The name is {name_value.upper()}")
+        # put the upper case version back in
+        kwargs['name'] = name_value.upper()
+        # i have changed the original dictionary!
+        print(kwargs)
+    else:
+        print("name value not found")
+
+kwargs_example_2(name = "professor steffen", breakfast_eaten = "costco muffin")
 
 # 3. CREATING A CUSTOMER
 # Using the code provided below, create a customer, but make their email
@@ -52,6 +68,18 @@ class Customer(Model):
     
     def get_info(self):
         return f"Customer {self.id_customer}'s data: Name: {self.name} | Email: {self.email} | Birth Year: {self.birth_year} | State: {self.state}"
+    # create a class method, so you do cls as the first argument 
+    # and you need to tell python that it is a special class method
+    # by adding @classmethod above it
+    # this changed the behavior of the method to let you run it without an object first
+    @classmethod
+    def create(cls, **query):
+        email_value = query.get('email')
+        if "@" in email_value:
+            # validated, actually create it, so run the original version of .create
+            return super().create(**query) # run the original one, return whatever it returns
+        else:
+            print("you need to provide a valid email. row not created.")
     
                   
 db.connect()

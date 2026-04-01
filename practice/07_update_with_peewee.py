@@ -39,7 +39,16 @@ db.create_tables([Customer])
 # to be 2010, then call .save() on the customer object. Check if the change
 # is in the database.
 
+cust_obj = Customer.get(Customer.id_customer ==3)
 
+print(cust_obj)
+print(cust_obj.get_info())
+print(cust_obj.birth_year)
+cust_obj.birth_year = 2010
+print(cust_obj.get_info())
+cust_obj.save() # NEED TO KNOW FOR EXAM
+
+# to change in db you need to do .save()
 '''
 You can also update multiple records using .update
 
