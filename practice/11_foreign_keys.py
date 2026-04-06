@@ -25,6 +25,37 @@ field_name = ForeignKeyField(Customer, backref='appointments', on_delete='CASCAD
 # When you create your SqliteDatabase connection, add pragmas for foreign key
 # db = SqliteDatabase('books.db', pragmas={'foreign_keys': 1})
 
+from peewee import *
+
+db = SqliteDatabase("books.db", pragmas={'foreign_keys': 1})
+
+class Author(Model):
+    author_id = AutoField(primary_key = True)
+    name = CharField()
+    birth_year = IntegerField()
+
+    class Meta:
+        database = db
+
+class Book(Model):
+    book_id = AutoField(primary_key = True)
+    title = CharField()
+    pages = IntegerField()
+    year_published = IntegerField()
+    author_id = ForeignKeyField(Author, backref = "books", on_delete = "CASCADE")
+
+    class Meta:
+        database = db
+
+db.connect()
+db.create_tables([Author, Book])
+
+all_books = Book.select()
+
+for book_obj in all_books:
+    print(book_obj.title, book_obj.author_id.name, book_obj.author_id.birth_year)
+
+
 
 
 # 2. READ FROM THE DATABASE
@@ -37,6 +68,17 @@ Foreign Key Field Structure
 ---------------------------
 field_name = ForeignKeyField(Customer, backref='appointments', on_delete='CASCADE')
 '''
+
+clear_screen()
+
+author_id_input = int(input("Enter and author id number: "))
+
+author_obj = Author.get(Author.author_id == author_id_input)
+
+print(f"{author_obj.name} has published the following books:")
+for book_obj in author_obj.books:
+    print(f"\t{book_obj.title}")
+
 
 # 3. ADDING A FOREIGNKEYFIELD
 # In the Book class, make author_id a ForeignKeyField
